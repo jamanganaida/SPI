@@ -1,0 +1,17 @@
+SUPERPOBLACION IMPERIAL - APK GRATIS CON GITHUB
+
+1. Crea una cuenta en github.com y un repositorio nuevo (publico o privado).
+2. Sube TODO el contenido de esta carpeta al repositorio:
+   www/ (index.html y bateriaultra.mp3), package.json, capacitor.config.json
+   y .github/workflows/apk.yml
+   Si tu celular no deja subir la carpeta oculta ".github": en el repositorio
+   toca "Add file > Create new file", escribe como nombre
+   .github/workflows/apk.yml y pega el contenido de apk.yml.
+3. Abre la pestana "Actions". Se compila solo al subir los archivos
+   (tarda unos 5 a 8 minutos). Tambien puedes tocar "Run workflow".
+4. Cuando termine en verde, entra a esa ejecucion, baja a "Artifacts" y
+   descarga "superpoblacion-imperial-apk" (es un zip con app-debug.apk).
+5. Instala el APK en el celular (permite "instalar apps desconocidas").
+
+Para actualizar el juego: reemplaza www/index.html en GitHub y se
+vuelve a compilar.
