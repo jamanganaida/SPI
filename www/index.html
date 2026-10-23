@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Superpoblación Imperial</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%91%91%3C/text%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{--bg:#2b1d12;--panel:#f1e2bd;--ink:#3a2412;--accent:#c9971c;--btn:#7a1f1f;--btnink:#ffe9a8;--head:#4a2c17;
+margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;padding-bottom:60px}
+body.negro{--bg:#0d0d0f;--panel:#1d1d22;--ink:#e8e8e8;--accent:#e0b030;--btn:#34343c;--btnink:#ffd966;--head:#000}
+body.rojo{--bg:#3b0a0a;--panel:#f6d9d0;--ink:#3a0d0d;--accent:#d4a017;--btn:#a31212;--btnink:#fff0c0;--head:#5a0f0f}
+input[type=checkbox]{display:none}
+header{position:relative;background:var(--head);color:var(--accent);text-align:center;padding:10px 48px 6px}
+#nombreweb{margin:2px 0;font-size:22px;letter-spacing:1px;text-shadow:2px 2px #0008}
+.castillo{width:32px;height:24px;vertical-align:middle;margin-right:6px}
+#nomImp{font-size:14px;color:#fff}#nivelTxt{font-size:12px;color:#ddd}
+.ib{position:absolute;top:8px;background:var(--accent);border:2px solid var(--ink);border-radius:50%;width:34px;height:34px;font-size:17px;cursor:pointer;padding:0}
+#tema{right:8px}#sonido{left:8px}
+#barra{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 6px;background:var(--head);padding:6px;border-bottom:3px solid var(--accent)}
+.pill{background:#0007;border:1px solid var(--accent);border-radius:12px;padding:2px 9px;font-size:13px;color:#fff;white-space:nowrap}
+.tab{display:inline-block;margin:10px 4px 4px;padding:8px 14px;background:var(--btn);color:var(--btnink);border:2px solid var(--accent);border-radius:20px;font-weight:bold;cursor:pointer;user-select:none;box-shadow:0 3px #0006}
+#btnjuego:checked+.tab,#btnatacar:checked+.tab,#btnMenu:checked+.tab,#btnruleta:checked+.tab,#btnruleta2:checked+.tab{background:var(--accent);color:#2b1d12}
+.spicasa,.spijuego,.spiataque{background:var(--panel);margin:8px;padding:12px;border:3px double var(--accent);border-radius:12px}
+.spijuego,.spiataque,.menu,.spiruleta,.spiruleta2{display:none}
+#btnjuego:checked~.spijuego,#btnatacar:checked~.spiataque{display:block}
+#btnjuego:checked~.spicasa{display:none}
+#btnMenu:checked~.menu,#btnruleta:checked~.spiruleta,#btnruleta2:checked~.spiruleta2{display:block}
+h3,h4{margin:8px 0;color:var(--btn)}body.negro h3,body.negro h4{color:var(--accent)}
+.spicasa p,.spicasa li{line-height:1.5;font-size:15px}
+#menuspicasa{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+#menuspicasa a{background:var(--btn);color:var(--btnink);padding:4px 12px;border-radius:14px;text-decoration:none;font-size:13px}
+#imperios{position:relative;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 2px 12px}
+.imp{flex:0 0 118px;scroll-snap-align:center;background:linear-gradient(160deg,hsl(var(--h) 45% 34%),hsl(var(--h) 50% 18%));color:#fff;border:2px solid #fff3;border-radius:14px;padding:8px 6px;text-align:center;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:0 4px #0006;transition:transform .2s}
+.imp .emb{font-size:34px;line-height:1}.imp b{font-size:12px}.imp small{font-size:12px}
+.imp.act{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent),0 4px #0006;transform:translateY(-3px)}
+.imp.nuevo{--h:40;border-style:dashed;background:#0002;color:var(--ink)}
+.imp.nuevo.no{opacity:.6}
+#produccion{background:#0002;border:1px solid var(--accent);border-radius:10px;padding:6px 10px;margin-bottom:10px;text-align:center}
+#produccion h4{margin:2px 0}.prfila{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-size:14px}
+.pos{color:#2e9a4a}.neg{color:#d04a3a}body.negro .pos{color:#5fd27a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px}
+.card{background:#0001;border:1px solid var(--accent);border-radius:10px;padding:8px;text-align:center}
+.cnt{font-weight:bold;margin-bottom:6px;min-height:20px}
+.card small,.mon small{display:block;font-size:11px;opacity:.85;margin-top:4px}
+.btn{width:100%;padding:12px 6px;font-size:15px;font-weight:bold;font-family:inherit;color:var(--btnink);background:var(--btn);border:2px solid var(--accent);border-radius:10px;box-shadow:0 4px #0007;cursor:pointer;touch-action:manipulation;user-select:none}
+.btn:active{transform:translateY(3px);box-shadow:0 1px #0007}
+.card.no .btn,.btn.no{opacity:.55}
+.menu{background:#0002;border-radius:10px;padding:10px;margin:8px 0}.menu li{margin:6px 0;font-size:14px}
+ul{list-style:none;padding:0;margin:0}.spicasa ol{padding-left:22px}
+#monstruos{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.mon{width:150px;text-align:center;background:#0002;border:2px solid var(--btn);border-radius:12px;padding:10px}
+.monstruo{font-size:62px;line-height:1.1;filter:drop-shadow(0 4px 2px #0006)}
+.mon.muerto .monstruo{filter:grayscale(1);opacity:.45}
+.hp{height:10px;background:#0005;border-radius:6px;overflow:hidden;margin:6px 0 2px}
+.hp i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#c0392b,#e67e22);transition:width .3s}
+.mon .btn{margin-top:8px;padding:9px 4px;font-size:13px}
+.mejora{margin-top:14px;text-align:center;background:#0002;border:1px solid var(--accent);border-radius:10px;padding:10px}
+.mejora .btn{width:auto;padding:8px 14px;margin-top:6px}
+.spiruleta,.spiruleta2{text-align:center;margin-top:8px}
+.vara{width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid var(--btn);margin:0 auto -16px;position:relative;z-index:2;filter:drop-shadow(0 2px 1px #0008)}
+.rueda{width:230px;max-width:80vw;height:auto;cursor:pointer;transition:transform 2.4s cubic-bezier(.15,.7,.2,1);border-radius:50%;box-shadow:0 6px 14px #0008}
+#modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:90}
+#modal.abierto{display:flex}
+.mbox{background:var(--panel);color:var(--ink);border:3px double var(--accent);border-radius:14px;padding:16px;width:min(90vw,340px);text-align:center}
+.mbox h3{margin:0 0 8px}.mbox p{margin:0;font-size:14px;line-height:1.5}
+#mCant{width:100%;padding:10px;font-size:18px;text-align:center;border:2px solid var(--accent);border-radius:10px;margin:10px 0 4px;background:#fff;color:#222}
+.mfila{display:flex;gap:8px;margin-top:8px}.mfila .btn{padding:10px 4px}
+#mMax{margin-top:2px;padding:6px;font-size:13px;opacity:.9}
+#avisos{position:fixed;left:0;right:0;bottom:24px;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;z-index:100}
+.aviso{background:#000d;color:#fff;padding:9px 16px;border-radius:20px;border:2px solid var(--accent);font-size:14px;max-width:88vw;text-align:center;animation:av 2.8s ease forwards}
+.aviso.mal{border-color:#e05a4a}.aviso.gana{border-color:#ffd24a;background:#3a2a00ee}
+@keyframes av{0%{opacity:0;transform:translateY(12px)}12%{opacity:1;transform:none}72%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+footer{text-align:center;font-size:12px;color:var(--accent);margin-top:16px}
+</style></head><body>
+<header>
+<button id="sonido" class="ib" title="Sonido">&#128266;</button>
+<button id="tema" class="ib" data-a="tema" title="Cambiar estilo">&#127912;</button>
+<h1 id="nombreweb"><svg class="castillo" viewBox="0 0 64 48" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M4 46V14h6v-4h4v4h4V8h4v6h4V4h4v10h4V8h4v6h4v-4h4v4h6v32z"/><path d="M26 46V32a6 6 0 0 1 12 0v14z" fill="#0008"/></svg>Superpoblación Imperial</h1>
+<div id="nomImp"></div><div id="nivelTxt"></div>
+</header>
+<div id="barra">
+<span class="pill">🪙 <b id="pOro">0</b></span><span class="pill">🌲 <b id="pMad">0</b></span><span class="pill">🏠 <b id="pCas">0</b></span>
+<span class="pill">👥 Población: <b id="pPob">0</b></span><span class="pill">💎 <b id="pGem">0</b></span>
+</div>
+<input type="checkbox" id="btnjuego"><label for="btnjuego" class="tab">&#9654;&#65039; Jugar</label>
+<input type="checkbox" id="btnatacar"><label for="btnatacar" class="tab">&#128481;&#65039; Casería</label>
+<div class="spicasa">
+<h3>👑 Bienvenido a Superpoblación Imperial</h3>
+<div id="menuspicasa"><a href="#sobre">El juego</a><a href="#historia">La historia</a><a href="#objetivo">El objetivo</a></div>
+<h4 id="sobre">🎮 Sobre el juego</h4>
+<p><b>Superpoblación Imperial</b> es un juego de clicks: consigue oro, compra madera, construye casas y contrata gente que trabaja por ti. Tu progreso se guarda en el dispositivo y funciona sin internet.</p>
+<p>Para empezar:</p>
+<ol><li>Toca <b>Conseguir oro</b> hasta juntar 150.</li><li>Compra 10 de madera (10 de oro cada una).</li><li>Construye una casa (10 de madera + 50 de oro).</li><li>Contrata un minero: te da oro solo, cada par de segundos.</li></ol>
+<p>Después llegan los carpinteros, los constructores y los contratistas, que hacen crecer tu población sin parar. Con soldados puedes cazar monstruos en 🗡️ <b>Casería</b>, y las ruletas son pura suerte.</p>
+<h4 id="historia">📜 La historia</h4>
+<p>En un imperio rodeado de muros gigantes vivía un príncipe cansado de obedecer órdenes. Un día se marchó solo, muy lejos, hacia las montañas más remotas, decidido a levantar su propio imperio.</p>
+<p>Junto a un río de aguas claras encontró pepitas de oro. Volvió al reino con la idea de guardarse el secreto, pero el rey, furioso por su ausencia, le quitó el título: el príncipe pasó a ser un simple plebeyo.</p>
+<p>Con su oro compró madera a un carpintero del mercado y contrató a un constructor para levantar su primera casa. Llegaron los primeros mineros, y con ellos más oro, más casas y más gente dispuesta a mudarse.</p>
+<p>Cuando los recién llegados empezaron a escasear, contrató a un contratista que recorría otros imperios buscando a quien aguantara un pico. Así nació el primer imperio de las montañas. Lo que pase ahora depende de ti.</p>
+<h4 id="objetivo">🎯 El objetivo</h4>
+<p>Suma mucha población y mucho ejército, mata a los monstruos y gana gemas. Con las gemas puedes mejorar a tus soldados o <b>comprar otro imperio</b> y empezar desde cero. Cada nuevo imperio cuesta el doble que el anterior, empezando en 50 💎, y puedes tener infinitos imperios.</p>
+<p style="text-align:center"><label for="btnjuego" class="tab">▶️ ¡A jugar!</label></p>
+</div>
+<div class="spiataque">
+<div id="monstruos"></div>
+<div class="mejora">🗡️ Daño por soldado: <b id="danoV">1</b><br><button class="btn" id="mejBtn" data-a="dano">Mejorar daño · 1 💎</button></div>
+</div>
+<div class="spijuego">
+<div id="imperios"></div>
+<div id="produccion"><h4>📈 Producción por minuto (estimada)</h4>
+<div class="prfila"><span>🪙 Oro <b id="prOro">0</b></span><span>🌲 Madera <b id="prMad">0</b></span><span>🏠 Casas <b id="prCas">0</b></span></div></div>
+<div class="grid" id="principal"></div>
+<div class="grid" id="secundario"></div>
+<div id="menuayuda"><input type="checkbox" id="btnMenu"><label for="btnMenu" class="tab">&#128220; Ayuda</label>
+<nav class="menu"><ul>
+<li>⛏️ <b>Minero:</b> +1 oro cada 2 s.</li>
+<li>🪚 <b>Carpintero:</b> +1 madera cada 4 s (gasta 10 de oro).</li>
+<li>👷 <b>Constructor:</b> +1 casa cada 8 s (gasta 10 de madera y 50 de oro).</li>
+<li>🤵 <b>Contratista:</b> +1 minero cada 14 s (gasta 1 casa).</li>
+<li>⚔️ <b>Soldado:</b> sirve para atacar monstruos en Casería. Los que sobran de un ataque no se pierden.</li>
+<li>💎 <b>Gemas:</b> las dan los monstruos. Sirven para mejorar el daño y para fundar imperios.</li>
+</ul></nav></div>
+<div id="spiruletaa"><input type="checkbox" id="btnruleta"><label for="btnruleta" class="tab">&#127920; Ruleta · 50 🪙</label>
+<div class="spiruleta"><div>🪙 <span id="oro3">0</span></div><div class="vara"></div><svg id="ruleta" class="rueda" data-a="rul" data-v="0" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M100,100 L100.0,5.0 A95,95 0 0 1 167.2,32.8 Z" fill="#8b1a1a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(22.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">10</text></g><path d="M100,100 L167.2,32.8 A95,95 0 0 1 195.0,100.0 Z" fill="#1f5f3a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(67.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">70</text></g><path d="M100,100 L195.0,100.0 A95,95 0 0 1 167.2,167.2 Z" fill="#1d3f7a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(112.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">✖</text></g><path d="M100,100 L167.2,167.2 A95,95 0 0 1 100.0,195.0 Z" fill="#8a5a00" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(157.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">100</text></g><path d="M100,100 L100.0,195.0 A95,95 0 0 1 32.8,167.2 Z" fill="#8b1a1a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(202.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">50</text></g><path d="M100,100 L32.8,167.2 A95,95 0 0 1 5.0,100.0 Z" fill="#1f5f3a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(247.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">5</text></g><path d="M100,100 L5.0,100.0 A95,95 0 0 1 32.8,32.8 Z" fill="#1d3f7a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(292.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">20</text></g><path d="M100,100 L32.8,32.8 A95,95 0 0 1 100.0,5.0 Z" fill="#8a5a00" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(337.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="48" font-size="19">500</text></g><circle cx="100" cy="100" r="95" fill="none" stroke="#b8860b" stroke-width="5"/><circle cx="100" cy="100" r="13" fill="#b8860b" stroke="#3a2412" stroke-width="2"/></svg></div>
+<div id="spiruletaa2"><input type="checkbox" id="btnruleta2"><label for="btnruleta2" class="tab">&#128142; Ruleta VIP · 100 mil 🪙</label>
+<div class="spiruleta2"><div class="vara"></div><svg id="ruleta2" class="rueda" data-a="rul" data-v="1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M100,100 L100.0,5.0 A95,95 0 0 1 167.2,32.8 Z" fill="#8b1a1a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(22.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">💰</text><text x="100" y="58" font-size="11">10 mil</text></g><path d="M100,100 L167.2,32.8 A95,95 0 0 1 195.0,100.0 Z" fill="#1f5f3a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(67.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">💰</text><text x="100" y="58" font-size="11">100 mil</text></g><path d="M100,100 L195.0,100.0 A95,95 0 0 1 167.2,167.2 Z" fill="#1d3f7a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(112.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">🌲</text><text x="100" y="58" font-size="11">5 mil</text></g><path d="M100,100 L167.2,167.2 A95,95 0 0 1 100.0,195.0 Z" fill="#8a5a00" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(157.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">🌲</text><text x="100" y="58" font-size="11">10 mil</text></g><path d="M100,100 L100.0,195.0 A95,95 0 0 1 32.8,167.2 Z" fill="#8b1a1a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(202.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">🏠</text><text x="100" y="58" font-size="11">x10</text></g><path d="M100,100 L32.8,167.2 A95,95 0 0 1 5.0,100.0 Z" fill="#1f5f3a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(247.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">🏠</text><text x="100" y="58" font-size="11">x100</text></g><path d="M100,100 L5.0,100.0 A95,95 0 0 1 32.8,32.8 Z" fill="#1d3f7a" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(292.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">⚔️</text><text x="100" y="58" font-size="11">1</text></g><path d="M100,100 L32.8,32.8 A95,95 0 0 1 100.0,5.0 Z" fill="#8a5a00" stroke="#3a2412" stroke-width="1.5"/><g transform="rotate(337.5 100 100)" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#fff"><text x="100" y="42" font-size="20">💰</text><text x="100" y="58" font-size="11">1 mil</text></g><circle cx="100" cy="100" r="95" fill="none" stroke="#b8860b" stroke-width="5"/><circle cx="100" cy="100" r="13" fill="#b8860b" stroke="#3a2412" stroke-width="2"/></svg></div></div></div>
+</div>
+<div id="modal"><div class="mbox"><h3 id="mTit"></h3><p id="mInfo"></p>
+<input id="mCant" type="number" min="1" inputmode="numeric" placeholder="Cantidad de soldados">
+<button class="btn" id="mMax">Máximo útil</button>
+<div class="mfila"><button class="btn" id="mOk">✅ Confirmar</button><button class="btn" id="mNo">Cancelar</button></div></div></div>
+<div id="avisos"></div>
+<script>(function(){
+'use strict';
+var SAVE='spi_imperial_v2', PRECIO_BASE=50; // gemas que cuesta el 2º imperio (cada uno cuesta el doble que el anterior)
+var EMB=['🏰','🏯','🏛️','🕌','⛩️','🗼','🛕','🏟️'];
+var NOMB=['Imperio del Río','Imperio de la Montaña','Imperio del Sol','Imperio del Bosque','Imperio de la Luna','Imperio del Desierto'];
+var MON=[{e:'🧟',n:'Zombi',g:1,rev:2e9,max:1000},{e:'👹',n:'Ogro',g:10,rev:14e9,max:10000},{e:'🐉',n:'Dragón',g:100,rev:170e9,max:100000}];
+var IC={oro:'🪙',madera:'🌲',casas:'🏠'}, NOM={oro:'oro',madera:'madera',casas:'casas'};
+var NOMC={oro:'Oro',madera:'Madera',casas:'Casas',min:'Mineros',car:'Carpinteros',con:'Constructores',ctr:'Contratistas',sol:'Soldados'};
+var CARDS=[['oro','💰','Conseguir oro','oro','principal'],['madera','🌲','Comprar madera','madera','principal'],['casa','🏡','Construir casa','casas','principal'],['min','⛏️','Contratar minero','min','principal'],
+ ['car','🪚','Contratar carpintero','car','secundario'],['con','👷','Contratar constructor','con','secundario'],['ctr','🤵','Contratista de mineros','ctr','secundario'],['sol','⚔️','Reclutar soldado','sol','secundario']];
+var COSTOS={madera:{oro:10},casa:{oro:50,madera:10},min:{casas:1},car:{casas:1,oro:2e4},con:{casas:1,oro:1e5},ctr:{casas:1,oro:1e6},sol:{casas:1,oro:2e6}};
+var DEST={madera:'madera',casa:'casas',min:'min',car:'car',con:'con',ctr:'ctr',sol:'sol'};
+var REQ={car:function(E){return E.min>E.car*4+4?'':'Necesitas más mineros';},con:function(E){return E.car>E.con*5+5?'':'Necesitas más carpinteros';},ctr:function(E){return E.ctr<E.con?'':'Necesitas más constructores';}};
+var RT={car:'mín. 4 mineros por carpintero',con:'mín. 5 carpinteros por constructor',ctr:'máx. 1 por constructor'};
+var PR1=[10,70,0,100,50,5,20,500];
+var PR2=[['oro',1e4,'10 mil de oro'],['oro',1e5,'100 mil de oro'],['madera',5e3,'5 mil de madera'],['madera',1e4,'10 mil de madera'],['casas',10,'10 casas'],['casas',100,'100 casas'],['sol',1,'1 soldado'],['oro',1e3,'1 mil de oro']];
+var G,$=function(id){return document.getElementById(id);};
+
+function nuevo(i){return {n:NOMB[i]||('Imperio '+(i+1)),e:EMB[i%EMB.length],oro:0,madera:0,casas:0,min:0,car:0,con:0,ctr:0,sol:0,dano:1,exp:0,vida:[1000,10000,100000],muerto:[false,false,false]};}
+function cargar(){try{var s=JSON.parse(localStorage.getItem(SAVE));if(s&&s.imps&&s.imps.length){G=s;G.imps.forEach(function(E,i){var d=nuevo(i);for(var k in d)if(E[k]===undefined)E[k]=d[k];});if(!(G.act>=0&&G.act<G.imps.length))G.act=0;G.gemas=G.gemas||0;return;}}catch(e){}G={gemas:0,act:0,imps:[nuevo(0)]};}
+function guardar(){try{localStorage.setItem(SAVE,JSON.stringify(G));}catch(e){}}
+function cur(){return G.imps[G.act];}
+function pob(E){return E.min+E.car+E.con+E.ctr+E.sol;}
+function precio(){return PRECIO_BASE*Math.pow(2,G.imps.length-1);}
+function nivel(x){return x>100?Math.min(13,Math.floor(Math.log10(x))-1):0;}
+
+function fmt(n){n=Math.floor(n+1e-9);if(n<1000)return String(n);var u=['K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc'],i=-1,x=n;while(x>=1000&&i<u.length-1){x/=1000;i++;}var s=x>=100?x.toFixed(0):x>=10?x.toFixed(1):x.toFixed(2);if(s.indexOf('.')>=0)s=s.replace(/\.?0+$/,'');return s.replace('.',',')+u[i];}
+function fmtR(a){return a<100?String(Math.round(a*10)/10).replace('.',','):fmt(a);}
+function txt(id,v){var e=$(id);if(e&&e.textContent!==v)e.textContent=v;}
+function tasa(id,v){var e=$(id),s=(v>0?'+':v<0?'−':'')+fmtR(Math.abs(v));if(e.textContent!==s)e.textContent=s;e.className=v>0?'pos':v<0?'neg':'';}
+
+function aviso(msg,tipo){var c=$('avisos');while(c.children.length>=3)c.removeChild(c.firstChild);var d=document.createElement('div');d.className='aviso '+(tipo||'');d.textContent=msg;d.addEventListener('animationend',function(){d.remove();});c.appendChild(d);if(window.SFX){if(tipo==='gana')SFX.gana();else if(tipo==='mal')SFX.aviso();}}
+
+/* ---------- producción ---------- */
+function tasas(E){return {oro:30*E.min-150*E.car-375*E.con,madera:15*E.car-75*E.con,casas:7.5*E.con-60/14*E.ctr};}
+function produce(E,dt){var n;E.oro+=E.min*0.5*dt;
+ n=Math.min(E.car*0.25*dt,E.oro/10);if(n>0){E.madera+=n;E.oro-=10*n;}
+ n=Math.min(E.con*0.125*dt,E.madera/10,E.oro/50);if(n>0){E.casas+=n;E.madera-=10*n;E.oro-=50*n;}
+ n=Math.min(E.ctr/14*dt,E.casas);if(n>0){E.min+=n;E.casas-=n;}}
+
+/* ---------- compras ---------- */
+function puede(E,k){var c=COSTOS[k];for(var r in c)if(E[r]+1e-9<c[r])return false;return !(REQ[k]&&REQ[k](E));}
+function comprar(k){var E=cur();
+ if(k==='oro'){E.oro+=1;E.exp+=1;if(window.SFX)SFX.moneda();render();return;}
+ var c=COSTOS[k];for(var r in c)if(E[r]+1e-9<c[r])return aviso('Falta '+NOM[r],'mal');
+ if(REQ[k]){var m=REQ[k](E);if(m)return aviso(m,'mal');}
+ for(var q in c)E[q]-=c[q];E[DEST[k]]+=1;E.exp+=1;guardar();render();}
+
+/* ---------- modal ---------- */
+var modalOk=null;
+function abrirModal(o){$('mTit').textContent=o.t;$('mInfo').innerHTML=o.info;var inp=$('mCant');inp.style.display=o.input?'':'none';$('mMax').style.display=o.input?'':'none';inp.value='';$('mMax').setAttribute('data-max',o.max||0);modalOk=o.ok;$('modal').classList.add('abierto');if(o.input)setTimeout(function(){inp.focus();},60);}
+function cerrarModal(){$('modal').classList.remove('abierto');modalOk=null;}
+
+/* ---------- monstruos ---------- */
+function atacar(i){var E=cur(),m=MON[i];
+ if(E.muerto[i]){if(E.oro<m.rev)return aviso('Revivir cuesta '+fmt(m.rev)+' de oro','mal');E.oro-=m.rev;E.vida[i]=m.max;E.muerto[i]=false;guardar();render();return aviso(m.e+' '+m.n+' ha revivido','ok');}
+ var need=Math.ceil(E.vida[i]/E.dano);
+ abrirModal({t:'⚔️ Atacar a '+m.e+' '+m.n,input:true,max:Math.min(Math.floor(E.sol),need),
+  info:'Vida: <b>'+fmt(E.vida[i])+'</b> · Daño por soldado: <b>'+fmt(E.dano)+'</b><br>Soldados disponibles: <b>'+fmt(E.sol)+'</b><br>Para matarlo hacen falta: <b>'+fmt(need)+'</b>',
+  ok:function(n){n=Math.floor(n);if(!(n>0))return aviso('Escribe una cantidad','mal');if(n>Math.floor(E.sol))return aviso('Pocos soldados','mal');
+   var u=Math.min(n,Math.ceil(E.vida[i]/E.dano));E.sol-=u;E.vida[i]-=u*E.dano;E.exp+=u;if(window.SFX)SFX.golpe();
+   if(E.vida[i]<=0){E.vida[i]=0;E.muerto[i]=true;G.gemas+=m.g;aviso('💀 '+m.n+' derrotado: +'+m.g+' 💎','gana');if(n>u)aviso('Sobraron '+fmt(n-u)+' soldados: no se gastaron','ok');}
+   else aviso('Hiciste '+fmt(u*E.dano)+' de daño','ok');
+   guardar();render();cerrarModal();}});}
+function mejorar(){var E=cur();if(G.gemas<1)return aviso('Cuesta 1 💎','mal');G.gemas-=1;E.dano+=1;E.exp+=10;guardar();render();aviso('🗡️ Daño por soldado: '+E.dano,'ok');}
+
+/* ---------- imperios ---------- */
+function rebuildImperios(){var h='';G.imps.forEach(function(E,i){h+='<button class="imp'+(i===G.act?' act':'')+'" data-a="imp" data-v="'+i+'" style="--h:'+(i*47%360)+'"><span class="emb">'+E.e+'</span><b>'+E.n+'</b><small>👥 <span id="ip'+i+'">0</span></small></button>';});
+ h+='<button class="imp nuevo" id="impNuevo" data-a="nuevo"><span class="emb">➕</span><b>Nuevo imperio</b><small>💎 <span id="ipPrecio">0</span></small></button>';
+ var c=$('imperios');c.innerHTML=h;var a=c.querySelector('.act');if(a)c.scrollLeft=a.offsetLeft-(c.clientWidth-a.offsetWidth)/2;}
+function ir(i){G.act=i;rebuildImperios();render();guardar();}
+function nuevoImp(){var p=precio();
+ abrirModal({t:'🏰 Fundar un nuevo imperio',input:false,info:'Costo: <b>'+fmt(p)+' 💎</b><br>Tienes <b>'+fmt(G.gemas)+' 💎</b><br>Empezarás desde cero. Tus otros imperios siguen produciendo.',
+  ok:function(){cerrarModal();if(G.gemas<p)return aviso('Te faltan '+fmt(p-G.gemas)+' 💎','mal');G.gemas-=p;G.imps.push(nuevo(G.imps.length));G.act=G.imps.length-1;guardar();rebuildImperios();render();aviso('🏰 ¡Nuevo imperio fundado!','gana');}});}
+
+/* ---------- ruletas ---------- */
+var ang=[0,0],gir=[false,false];
+function girar(w){var E=cur(),costo=w?1e5:50;if(gir[w])return;if(E.oro<costo)return aviso('Necesitas '+fmt(costo)+' de oro','mal');
+ E.oro-=costo;gir[w]=true;ang[w]+=1440+Math.random()*360;$(w?'ruleta2':'ruleta').style.transform='rotate('+ang[w]+'deg)';if(window.SFX)SFX.gira();render();
+ setTimeout(function(){gir[w]=false;var s=Math.floor(((360-ang[w]%360)%360)/45);
+  if(w){var p=PR2[s];E[p[0]]+=p[1];aviso('🎉 Ganaste '+p[2],'gana');}
+  else if(PR1[s]>0){E.oro+=PR1[s];aviso('🎉 Ganaste '+PR1[s]+' de oro','gana');}else aviso('😶 No ganas nada','ok');
+  guardar();render();},2500);}
+
+/* ---------- tema ---------- */
+var TEMAS=['','negro','rojo'],ti=0;try{ti=+localStorage.getItem('spi_tema')||0;}catch(e){}
+function tema(){ti=(ti+1)%3;document.body.className=TEMAS[ti];try{localStorage.setItem('spi_tema',ti);}catch(e){}}
+
+/* ---------- interfaz ---------- */
+function costoTxt(k){var c=COSTOS[k];if(!c)return 'Gratis';var p=[];for(var r in c)p.push(fmt(c[r])+' '+IC[r]);return 'Cuesta '+p.join(' + ');}
+function armar(){var h={principal:'',secundario:''};
+ CARDS.forEach(function(c){var k=c[0];h[c[4]]+='<div class="card" id="c-'+k+'"><div class="cnt">'+NOMC[c[3]]+': <b id="n-'+k+'">0</b></div><button class="btn" id="b-'+k+'" data-a="buy" data-v="'+k+'">'+c[1]+' '+c[2]+'</button><small>'+costoTxt(k)+'</small>'+(RT[k]?'<small>'+RT[k]+'</small>':'')+'</div>';});
+ $('principal').innerHTML=h.principal;$('secundario').innerHTML=h.secundario;
+ var m='';MON.forEach(function(x,i){m+='<div class="mon" id="mc'+i+'"><div class="monstruo">'+x.e+'</div><b>'+x.n+'</b><div class="hp"><i id="hp'+i+'"></i></div><small id="mv'+i+'"></small><small>Recompensa: '+x.g+' 💎</small><button class="btn" id="ma'+i+'" data-a="atk" data-v="'+i+'">⚔️ Atacar</button></div>';});
+ $('monstruos').innerHTML=m;}
+function render(){var E=cur(),t=tasas(E);
+ txt('pOro',fmt(E.oro));txt('pMad',fmt(E.madera));txt('pCas',fmt(E.casas));txt('pPob',fmt(pob(E)));txt('pGem',fmt(G.gemas));
+ txt('nomImp',E.e+' '+E.n);txt('nivelTxt','⭐ Nivel '+nivel(E.exp)+' · '+fmt(E.exp)+' XP');txt('oro3',fmt(E.oro));
+ CARDS.forEach(function(c){txt('n-'+c[0],fmt(E[c[3]]));if(c[0]!=='oro')$('c-'+c[0]).classList.toggle('no',!puede(E,c[0]));});
+ tasa('prOro',t.oro);tasa('prMad',t.madera);tasa('prCas',t.casas);
+ MON.forEach(function(m,j){var d=E.muerto[j];$('hp'+j).style.width=(100*E.vida[j]/m.max)+'%';txt('mv'+j,d?'Derrotado':fmt(E.vida[j])+' / '+fmt(m.max));txt('ma'+j,d?'♻️ Revivir · '+fmt(m.rev)+' 🪙':'⚔️ Atacar');$('mc'+j).classList.toggle('muerto',d);});
+ txt('danoV',fmt(E.dano));$('mejBtn').classList.toggle('no',G.gemas<1);
+ G.imps.forEach(function(x,j){txt('ip'+j,fmt(pob(x)));});
+ txt('ipPrecio',fmt(precio()));$('impNuevo').classList.toggle('no',G.gemas<precio());}
+
+document.addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b)return;var a=b.getAttribute('data-a'),v=b.getAttribute('data-v');
+ if(a==='buy')comprar(v);else if(a==='atk')atacar(+v);else if(a==='imp')ir(+v);else if(a==='nuevo')nuevoImp();else if(a==='dano')mejorar();else if(a==='rul')girar(+v);else if(a==='tema')tema();});
+$('mOk').onclick=function(){if(modalOk)modalOk(parseInt($('mCant').value,10)||0);};
+$('mNo').onclick=cerrarModal;
+$('mMax').onclick=function(){$('mCant').value=this.getAttribute('data-max');};
+
+cargar();document.body.className=TEMAS[ti];armar();rebuildImperios();render();
+var ult=Date.now(),cont=0;
+setInterval(function(){var t=Date.now(),dt=Math.min((t-ult)/1000,5);ult=t;G.imps.forEach(function(E){produce(E,dt);});render();if(++cont%20===0)guardar();},250);
+document.addEventListener('visibilitychange',function(){if(document.hidden)guardar();else ult=Date.now();});
+window.addEventListener('pagehide',guardar);
+})();
+</script>
+<script>(function(){
+var VOL_MUSICA=0.35, VOL_SFX=0.10; // volumen de la música y de los efectos (0 a 1)
+var musica=new Audio('bateriaultra.mp3');musica.loop=true;musica.volume=VOL_MUSICA;musica.preload='auto';
+var mute=false,iniciada=false;
+try{mute=localStorage.getItem('sonido')==='off';}catch(e){}
+var AC=window.AudioContext||window.webkitAudioContext,ctx=null;
+function cx(){if(!ctx&&AC){ctx=new AC();}if(ctx&&ctx.state==='suspended'){ctx.resume();}return ctx;}
+function tono(f,d,v,tipo,f2,retraso){
+  var c=cx();if(!c||mute)return;
+  var t=c.currentTime+(retraso||0),o=c.createOscillator(),g=c.createGain();
+  o.type=tipo||'sine';o.frequency.setValueAtTime(f,t);
+  if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(v*VOL_SFX,t);g.gain.exponentialRampToValueAtTime(0.00001,t+d);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+0.02);
+}
+var S=window.SFX={
+  tick:function(){tono(900,0.05,0.15,'triangle',650);},
+  tab:function(){tono(520,0.09,0.2,'sine',760);},
+  moneda:function(){tono(1320,0.06,0.15,'square');tono(1760,0.09,0.15,'square',null,0.05);},
+  golpe:function(){tono(160,0.16,0.45,'sine',55);},
+  gira:function(){for(var i=0;i<10;i++){tono(700+(i%2)*120,0.03,0.1,'triangle',null,i*0.1+i*i*0.006);}},
+  gana:function(){[660,880,1100,1320].forEach(function(f,i){tono(f,0.14,0.2,'triangle',null,i*0.09);});},
+  aviso:function(){tono(300,0.12,0.2,'sine',200);}
+};
+function arrancar(){
+  if(iniciada||mute)return;
+  var p=musica.play();iniciada=true;
+  if(p&&p.catch)p.catch(function(){iniciada=false;});
+}
+function ponerIcono(){var b=document.getElementById('sonido');if(b)b.innerHTML=mute?'&#128263;':'&#128266;';}
+document.addEventListener('pointerdown',function(){cx();arrancar();},{passive:true});
+document.addEventListener('click',function(e){
+  var t=e.target.closest&&e.target.closest('button,a,label,[data-a]');if(!t)return;
+  var a=t.getAttribute('data-a');
+  if(t.id==='sonido'||t.id==='b-oro'||t.id==='mOk'||a==='rul')return;
+  if(t.tagName==='LABEL')S.tab();else S.tick();
+});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){musica.pause();}
+  else if(iniciada&&!mute){var p=musica.play();if(p&&p.catch)p.catch(function(){});}
+});
+window.addEventListener('pagehide',function(){musica.pause();});
+document.addEventListener('DOMContentLoaded',function(){
+  ponerIcono();
+  var b=document.getElementById('sonido');
+  if(b)b.addEventListener('click',function(){
+    mute=!mute;
+    try{localStorage.setItem('sonido',mute?'off':'on');}catch(e){}
+    if(mute){musica.pause();}else{iniciada=false;arrancar();S.tab();}
+    ponerIcono();
+  });
+});
+})();
+</script>
+<footer><p>&copy; Superpoblación Imperial</p></footer>
+</body></html>
